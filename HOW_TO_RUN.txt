@@ -1,0 +1,49 @@
+🎲 TX PREDICTOR TOOL v2.0 - MẤY BƯỚC CHẠY TOOL
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+✨ CÁCH DỄ NHẤT (Khuyên dùng):
+
+  1. Double-click:  start.bat
+  
+  2. Chờ cài đặt hoàn tất (~2-5 phút lần đầu)
+  
+  3. Mở trình duyệt: http://localhost:3000/tool
+  
+  4. DONE! ✅
+
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+NẾUVẪN CÓ LỖI:
+
+  • Kiểm tra Node.js: node --version (phải >= 18.0.0)
+    → Cài từ: https://nodejs.org/
+  
+  • Xoá folder: node_modules + package-lock.json
+    → Rồi chạy lại: start.bat
+  
+  • Xem tài liệu:
+    → QUICKSTART.txt (5 phút)
+    → GUIDE.md (chi tiết)
+
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+CẤU HÌNH CƠ BẢN (Sửa file .env):
+
+  PORT=3000                    (cổng server)
+  BETTING_UNIT=1000           (đơn vị cược, VND)
+  BET_ADVICE_MIN_CONFIDENCE=57 (độ tin cậy tối thiểu)
+
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+DỪNG TOOL:
+
+  Nhấn: Ctrl + C (trong PowerShell/CMD)
+
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+CHÚC MỪNG! Tool đã sẵn sàng sử dụng! 🚀

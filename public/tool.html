@@ -1,0 +1,180 @@
+﻿<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TX Predictor Tool</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/public/tool.css" />
+  </head>
+  <body>
+    <div class="bg-orb orb-a"></div>
+    <div class="bg-orb orb-b"></div>
+
+    <main class="layout">
+      <header class="hero reveal">
+        <div>
+          <p class="kicker">TXMD5 Predictor Dashboard</p>
+          <h1 id="headline">Dang tai du lieu...</h1>
+        </div>
+        <div class="hero-actions">
+          <button id="refreshBtn" type="button">Refresh</button>
+          <span id="syncState" class="pill">Waiting...</span>
+        </div>
+      </header>
+
+      <section class="grid-top reveal reveal-delay-1">
+        <article class="panel">
+          <h2>Du Doan Tai/Xiu Van Tiep Theo</h2>
+          <div class="metric-row">
+            <div>
+              <p class="label">Phien tiep theo</p>
+              <p id="sessionId" class="value">-</p>
+            </div>
+            <div>
+              <p class="label">Phien tham chieu</p>
+              <p id="sourceSessionId" class="value">-</p>
+            </div>
+            <div>
+              <p class="label">Ket Qua</p>
+              <p id="predictionResult" class="value accent">-</p>
+            </div>
+            <div>
+              <p class="label">Confidence</p>
+              <p id="confidence" class="value">-</p>
+            </div>
+          </div>
+          <div class="dice-row" id="diceRow">
+            <span class="dice">-</span>
+            <span class="dice">-</span>
+            <span class="dice">-</span>
+            <span class="dice total">Tong: -</span>
+          </div>
+          <p class="note">Xuc xac duoc giu on dinh theo tung phien, chi doi khi ket qua du doan doi.</p>
+
+          <div class="final-box">
+            <p class="label">Du Doan Cuoi Cung (Tong Hop)</p>
+            <p id="finalPredictionResult" class="value">Chua co du lieu</p>
+            <p id="finalPredictionMeta" class="note">Ket qua duoc tong hop tu tat ca thuat toan (ensemble).</p>
+          </div>
+          <div class="final-box pattern-box">
+            <p class="label">Cau phat hien</p>
+            <p id="patternName" class="value">-</p>
+            <p id="patternMeta" class="note">Dang cho du lieu cau...</p>
+          </div>
+        </article>
+
+        <article class="panel">
+          <h2>Betting Info</h2>
+          <div class="two-col">
+            <p><span>Trang thai:</span> <strong id="betStatus">-</strong></p>
+            <p><span>Tick:</span> <strong id="betTick">-</strong></p>
+            <p><span>Tong nguoi:</span> <strong id="bettors">-</strong></p>
+            <p><span>Tong tien:</span> <strong id="betTotal">-</strong></p>
+            <p><span>Tien Tai:</span> <strong id="betTai">-</strong></p>
+            <p><span>Tien Xiu:</span> <strong id="betXiu">-</strong></p>
+          </div>
+
+          <div class="advice-box">
+            <p class="label">Goi Y Dat Cuoc</p>
+
+            <div class="bankroll-row">
+              <input id="bankrollInput" class="bankroll-input" type="text" inputmode="numeric" placeholder="Nhap tong von (VD: 1000000)" />
+              <button id="applyBankrollBtn" class="bankroll-btn" type="button">Ap dung</button>
+            </div>
+            <p id="bankrollHint" class="note">Nhap tong von de tool tinh so tien nen vao cho moi van.</p>
+
+            <p id="betAdviceDecision" class="value accent">-</p>
+            <p id="betAdviceSide" class="note">-</p>
+            <div class="two-col compact">
+              <p><span>Diem tin hieu:</span> <strong id="betAdviceScore">-</strong></p>
+              <p><span>Von goi y:</span> <strong id="betAdviceStake">-</strong></p>
+              <p><span>Tien de xuat:</span> <strong id="betAdviceAmount">-</strong></p>
+            </div>
+            <p id="betAdviceRule" class="note">Quy tac: thang x1.98, thua mat toan bo tien dat.</p>
+            <p id="betAdviceRemainExplain" class="note">-</p>
+            <div class="two-col compact">
+              <p><span>Don vi cuoc:</span> <strong id="betAdviceUnit">-</strong></p>
+              <p><span>So du mo phong:</span> <strong id="betAdviceTrackedBalance">-</strong></p>
+              <p><span>L/L mo phong:</span> <strong id="betAdviceTrackedPnl">-</strong></p>
+            </div>
+            <p id="recentPerf" class="note">-</p>
+
+            <div class="two-col compact pnl-grid">
+              <p><span>Mo phong L/L:</span> <strong id="betAdvicePnlNet">-</strong></p>
+              <p><span>ROI:</span> <strong id="betAdvicePnlRoi">-</strong></p>
+              <p><span>So lenh:</span> <strong id="betAdvicePnlCount">-</strong></p>
+              <p><span>So du uoc tinh:</span> <strong id="betAdvicePnlBalance">-</strong></p>
+            </div>
+
+            <p class="label minor">Ly do</p>
+            <ul id="betAdviceReasons" class="advice-list">
+              <li>-</li>
+            </ul>
+
+            <p class="label minor">Canh bao</p>
+            <ul id="betAdviceWarnings" class="advice-list warning">
+              <li>-</li>
+            </ul>
+          </div>
+          <div class="final-box pattern-box">
+            <p class="label">Cau phat hien</p>
+            <p id="patternName" class="value">-</p>
+            <p id="patternMeta" class="note">Dang cho du lieu cau...</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="grid-bottom reveal reveal-delay-2">
+        <article class="panel span-2">
+          <h2>Model Votes</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>Du doan</th>
+                  <th>Confidence</th>
+                  <th>Ly do</th>
+                </tr>
+              </thead>
+              <tbody id="modelsBody">
+                <tr><td colspan="4">Chua co du lieu</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="final-box pattern-box">
+            <p class="label">Cau phat hien</p>
+            <p id="patternName" class="value">-</p>
+            <p id="patternMeta" class="note">Dang cho du lieu cau...</p>
+          </div>
+        </article>
+
+        <article class="panel">
+          <h2>Leaderboard</h2>
+          <ul id="leaderboard" class="leaderboard">
+            <li>Dang tai...</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="panel reveal reveal-delay-3">
+        <h2>JSON Du Doan</h2>
+        <pre id="jsonOutput" class="json-block">{}</pre>
+      </section>
+    </main>
+
+    <script type="module" src="/public/tool.js"></script>
+  </body>
+</html>
+
+
+
+
+
+

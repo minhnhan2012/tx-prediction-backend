@@ -1,0 +1,215 @@
+════════════════════════════════════════════════════════════════════════════════
+  🎲 TX PREDICTOR TOOL v2.0 - QUICK START GUIDE
+════════════════════════════════════════════════════════════════════════════════
+
+📍 LOCATION: D:\Users\Asus\Downloads\tool\tx-prediction-backend
+
+════════════════════════════════════════════════════════════════════════════════
+  🚀 CÁCH 1: RUN FILE .bat (DỄ NHẤT - KHUYÊN DÙNG)
+════════════════════════════════════════════════════════════════════════════════
+
+1. Tìm file: start.bat (trong thư mục tx-prediction-backend)
+2. Double-click vào start.bat
+3. Chờ cài đặt hoàn tất (lần đầu sẽ lâu ~2-5 phút)
+4. Mở trình duyệt nhập: http://localhost:3000/tool
+5. Dùng tool!
+
+Để dừng: Đóng cửa sổ PowerShell hoặc Ctrl+C
+
+
+════════════════════════════════════════════════════════════════════════════════
+  🚀 CÁCH 2: RUN FILE PowerShell (CHUYÊN NGHIỆP)
+════════════════════════════════════════════════════════════════════════════════
+
+LẦN ĐẦU (Setup):
+  1. Mở PowerShell tại thư mục tx-prediction-backend
+     - Shift+Right Click → Open PowerShell here
+     - Hoặc: Win+X → Windows PowerShell
+  
+  2. Chạy lệnh:
+     .\launcher.ps1 setup
+  
+  3. Chọn "Y" nếu được hỏi (để cài npm packages)
+
+CHẠY TOOL (Lần sau):
+  .\launcher.ps1 start
+  
+CHẠY DEV MODE (Với auto-reload):
+  .\launcher.ps1 dev
+
+DỪNG SERVER:
+  Ctrl+C
+
+
+════════════════════════════════════════════════════════════════════════════════
+  🚀 CÁCH 3: MANUAL VIA COMMAND LINE (CHI TIẾT)
+════════════════════════════════════════════════════════════════════════════════
+
+BƯỚC 1: Mở PowerShell hoặc Command Prompt
+
+BƯỚC 2: Đi tới thư mục
+  cd "D:\Users\Asus\Downloads\tool\tx-prediction-backend"
+
+BƯỚC 3: Kiểm tra Node.js (chỉ lần đầu)
+  node --version
+  (Phải hiển thị v18.x hoặc cao hơn)
+  
+  Nếu không thấy → cài Node.js từ https://nodejs.org/
+
+BƯỚC 4: Cài đặt dependencies (chỉ lần đầu)
+  npm install
+  (Chờ ~2-5 phút)
+
+BƯỚC 5: Copy file cấu hình (chỉ lần đầu)
+  copy .env.example .env
+
+BƯỚC 6: Chạy tool
+  npm run start
+  
+  Hoặc dev mode (auto-reload):
+  npm run dev
+
+BƯỚC 7: Mở trình duyệt
+  http://localhost:3000/tool
+
+BƯỚC 8: Dừng tool
+  Ctrl+C
+
+
+════════════════════════════════════════════════════════════════════════════════
+  🌐 TRUY CẬP TOOL
+════════════════════════════════════════════════════════════════════════════════
+
+Web UI:         http://localhost:3000/tool
+Health Check:   http://localhost:3000/health
+API:            http://localhost:3000/api/predictor/current
+
+
+════════════════════════════════════════════════════════════════════════════════
+  ⚙️ CẤU HÌNH (File .env)
+════════════════════════════════════════════════════════════════════════════════
+
+Mở file .env bằng Notepad hoặc VS Code:
+
+PORT=3000                           → Cổng server (mặc định 3000)
+BETTING_UNIT=1000                   → Đơn vị cược (VND)
+PREDICTION_POLL_MS=1500             → Kiểm tra dự đoán (ms)
+BET_ADVICE_MIN_CONFIDENCE=57        → Độ tin cậy tối thiểu
+BET_ADVICE_MAX_BANKROLL_PERCENT=8   → Max cược (% số dư)
+LOG_REQUESTS=false                  → Bật log chi tiết
+
+💡 Tip: Tăng BETTING_UNIT để cược lớn hơn, giảm PREDICTION_POLL_MS để nhanh hơn
+
+
+════════════════════════════════════════════════════════════════════════════════
+  ✨ CHỨC NĂNG CHÍNH
+════════════════════════════════════════════════════════════════════════════════
+
+✓ Dự đoán Tài/Xỉu phiên tiếp theo
+✓ Gợi ý đặt cược thông minh
+  - Nên đặt cược hay không
+  - Tài hay Xỉu?
+  - % số dư gợi ý
+  - Số tiền cụ thể
+  
+✓ Thống kê realtime
+  - Tỷ lệ thắng (10 phiên, 30 phiên, toàn bộ)
+  - Streak hiện tại
+  - Win rate toàn bộ
+  
+✓ Lịch sử phiên
+  - Xem lịch sử 100+ phiên
+  - Kết quả: WIN/LOSS
+  - Dự đoán vs Kết quả thực
+
+
+════════════════════════════════════════════════════════════════════════════════
+  🐛 TROUBLESHOOTING
+════════════════════════════════════════════════════════════════════════════════
+
+❌ "Node.js is not recognized"
+   → Cài Node.js từ https://nodejs.org/
+   → Khởi động lại PowerShell
+
+❌ "npm ERR! code ENOENT"
+   → Kiểm tra thư mục: D:\Users\Asus\Downloads\tool\tx-prediction-backend
+   → Phải có file: package.json
+
+❌ "Address already in use :::3000"
+   → Đã có server chạy trên port 3000
+   → Cách 1: Thay PORT=3001 trong .env
+   → Cách 2: Dừng server: Get-Process node | Stop-Process
+
+❌ "Cannot find module 'express'"
+   → Dependencies chưa cài đặt
+   → Chạy: npm install
+
+❌ Port 3000 không mở được
+   → Kiểm tra: Get-Process node
+   → Nếu không thấy → Chạy lại: npm run start
+
+
+════════════════════════════════════════════════════════════════════════════════
+  📚 TÀI LIỆU
+════════════════════════════════════════════════════════════════════════════════
+
+README.md       → Giới thiệu chung
+GUIDE.md        → Hướng dẫn chi tiết (đọc nếu cần)
+.env.example    → Các tham số cấu hình
+launcher.ps1    → Script PowerShell nâng cao
+start.bat       → Script Windows cơ bản
+
+
+════════════════════════════════════════════════════════════════════════════════
+  💡 TIPS & TRICKS
+════════════════════════════════════════════════════════════════════════════════
+
+1. Chạy 24/7 trên Windows:
+   - Tạo file: run-24-7.bat
+   - Nội dung:
+     @echo off
+     :loop
+     npm run start
+     timeout /t 5
+     goto loop
+   - Double-click để chạy
+
+2. Lưu log vào file:
+   npm run start > tool.log 2>&1
+
+3. Xem log realtime:
+   Get-Content tool.log -Wait
+
+4. Tối ưu hiệu suất:
+   - Giảm PREDICTION_POLL_MS (1000-1500ms)
+   - Tăng BET_ADVICE_MIN_CONFIDENCE (65-75)
+   - Tăng BETTING_UNIT nếu muốn cược lớn hơn
+
+
+════════════════════════════════════════════════════════════════════════════════
+  ⚠️ LƯU Ý QUAN TRỌNG
+════════════════════════════════════════════════════════════════════════════════
+
+⚠️  DỰ ĐOÁN CHỈ LÀ MÔ HÌNH THỐNG KÊ - KHÔNG ĐẢM BẢO KẾT QUẢ
+⚠️  GỢI Ý ĐẶT CƯỢC KHÔNG PHẢI CAM KẾT LỢI NHUẬN
+⚠️  LUÔN QUẢN LÝ VỐN CẨNTHẬN - KHÔNG NÊN CƯỢC QUÁNG LỚN
+✅  THEO DÕI HIỆU SUẤT - KIỂM TRA TỶ LỆ THẮNG THỰC TẾ
+
+
+════════════════════════════════════════════════════════════════════════════════
+  📞 SUPPORT
+════════════════════════════════════════════════════════════════════════════════
+
+Nếu gặp vấn đề:
+1. Kiểm tra phần "TROUBLESHOOTING"
+2. Kiểm tra file .env có đúng không
+3. Kiểm tra kết nối mạng (ping google.com)
+4. Restart server: Ctrl+C rồi npm run start
+5. Xem GUIDE.md để hướng dẫn chi tiết
+
+
+════════════════════════════════════════════════════════════════════════════════
+  VERSION: 2.0.0
+  STATUS: ✅ Production Ready
+  UPDATED: 2025-03-11
+════════════════════════════════════════════════════════════════════════════════

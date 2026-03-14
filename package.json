@@ -1,0 +1,29 @@
+{
+  "name": "tx-prediction-backend",
+  "version": "2.0.0",
+  "description": "Advanced TX Prediction Monitor + Betting Assistant (Tai/Xiu Predictor)",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "check": "node --check src/server.js",
+    "clear-db": "node --env-file=.env scripts/clearDatabase.js",
+    "export-stats": "node --env-file=.env scripts/exportStats.js"
+  },
+  "keywords": ["tai-xiu", "prediction", "betting", "txmd5", "gambling"],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "cors": "^2.8.5",
+    "compression": "^1.7.4",
+    "dotenv": "^16.4.4"
+  },
+  "devDependencies": {
+    "eslint": "^8.55.0"
+  }
+}
