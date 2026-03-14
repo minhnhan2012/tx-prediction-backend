@@ -368,6 +368,43 @@ function getCurrentPredictionSnapshot() {
   return monitor.getLatestPredictionSnapshot() || predictor.buildCurrentPrediction();
 }
 
+function buildCompactPrediction(snapshot) {
+  if (!snapshot || !snapshot.prediction) {
+    return null;
+  }
+
+  const prediction = snapshot.prediction;
+  const referenceRecord = database.getLatestReferenceRecord
+    ? database.getLatestReferenceRecord()
+    : null;
+  const rawPayload =
+    referenceRecord?.rawPayload && typeof referenceRecord.rawPayload === "object"
+      ? referenceRecord.rawPayload
+      : null;
+
+  const base =
+    rawPayload && Object.keys(rawPayload).length > 0
+      ? { ...rawPayload }
+      : {
+          betting_info: prediction.betting_info ?? null,
+          ket_qua: prediction.ket_qua ?? null,
+          md5_raw: prediction.md5_raw ?? null,
+          phien: prediction.phien ?? null,
+          tick_update_at: prediction.source?.tick_update_at ?? null,
+          update_at: prediction.source?.update_at ?? null,
+          tong: prediction.tong ?? null,
+          xuc_xac_1: prediction.xuc_xac_1 ?? null,
+          xuc_xac_2: prediction.xuc_xac_2 ?? null,
+          xuc_xac_3: prediction.xuc_xac_3 ?? null
+        };
+
+  return {
+    ...base,
+    du_doan: prediction.ket_qua ?? null,
+    ti_le: prediction.confidence_percent ?? null
+  };
+}
+
 app.get("/", (req, res) => {
   res.json({
     service: config.serviceName,
@@ -377,6 +414,7 @@ app.get("/", (req, res) => {
       "GET /tool",
       "GET /api/current-session",
       "GET /api/predictor/current",
+      "GET /api/predictor/compact",
       "GET /api/predictor/models",
       "GET /api/history?limit=100&status=all",
       "GET /api/stats?windows=10,50,100",
@@ -450,6 +488,21 @@ app.get("/api/summary", (req, res) => {
   }
 
   res.json(result);
+});
+
+app.get("/api/predictor/compact", (req, res) => {
+  const snapshot = getCurrentPredictionSnapshot();
+  const compact = buildCompactPrediction(snapshot);
+
+  if (!compact) {
+    res.status(404).json({
+      message: "Chua co du lieu de tao du doan",
+      hint: "Cho service poll prediction API it giay roi thu lai."
+    });
+    return;
+  }
+
+  res.json(compact);
 });
 
 app.get("/api/predictor/current", (req, res) => {
@@ -667,7 +720,6 @@ function gracefulShutdown(signal) {
 
 process.on("SIGINT", () => gracefulShutdown("SIGINT"));
 process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
-
 
 
 

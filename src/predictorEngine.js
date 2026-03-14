@@ -1534,7 +1534,11 @@ export class PredictorEngine {
 
     // calibration: use historical stats to adjust confidence
     const stats = this.database.getPredictionStats ? this.database.getPredictionStats() : null;
-    const calibMap = buildCalibrationMap(stats);
+    const dbCalibMap = buildCalibrationMap(stats);
+    const calibMap = {
+      ...(this.config.calibrationMap || {}),
+      ...dbCalibMap
+    };
 
     const latestHistorySide = history[history.length - 1]?.actualResult || null;
     const fallbackSide = referenceRecord.predictedResult || latestHistorySide || "TAI";
@@ -1624,7 +1628,6 @@ export class PredictorEngine {
     return this.buildPrediction(referenceRecord);
   }
 }
-
 
 
 

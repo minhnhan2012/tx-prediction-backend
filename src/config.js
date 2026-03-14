@@ -34,6 +34,63 @@ function toFloat(value, fallback, min, max) {
   return parsed;
 }
 
+function clampNumber(value, min, max) {
+  if (!Number.isFinite(value)) {
+    return null;
+  }
+
+  let result = value;
+  if (Number.isFinite(min)) {
+    result = Math.max(min, result);
+  }
+  if (Number.isFinite(max)) {
+    result = Math.min(max, result);
+  }
+
+  return result;
+}
+
+function normalizeCalibrationValue(value) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) {
+    return null;
+  }
+
+  const ratio = parsed > 1 ? parsed / 100 : parsed;
+  return clampNumber(ratio, 0, 1);
+}
+
+function parseCalibrationMap(raw) {
+  if (!raw || typeof raw !== "string") {
+    return null;
+  }
+
+  try {
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      return null;
+    }
+
+    const map = {};
+    for (const [key, value] of Object.entries(parsed)) {
+      const normalized = normalizeCalibrationValue(value);
+      if (normalized !== null) {
+        map[key] = normalized;
+      }
+    }
+
+    return Object.keys(map).length > 0 ? map : null;
+  } catch {
+    return null;
+  }
+}
+
+const DEFAULT_CALIBRATION_MAP = Object.freeze({
+  "50-70": 0.5726,
+  "70-80": 0.7529,
+  "90-100": 0.9917
+});
+
 export function parseWindowsParam(rawWindows) {
   if (!rawWindows || typeof rawWindows !== "string") {
     return [...DEFAULT_WINDOWS];
@@ -53,6 +110,12 @@ export function parseWindowsParam(rawWindows) {
 }
 
 export function loadConfig() {
+  const calibrationOverrides = parseCalibrationMap(process.env.CALIBRATION_MAP);
+  const calibrationMap = {
+    ...DEFAULT_CALIBRATION_MAP,
+    ...(calibrationOverrides || {})
+  };
+
   return Object.freeze({
     serviceName: process.env.SERVICE_NAME || "tx-prediction-backend",
     host: process.env.HOST || "0.0.0.0",
@@ -84,10 +147,10 @@ export function loadConfig() {
     betAdviceMaxBankrollPercent: toFloat(process.env.BET_ADVICE_MAX_BANKROLL_PERCENT, 8, 0.5, 12),
     bettingUnit: toInt(process.env.BETTING_UNIT, 1000, 10, 100000),
     patternDataPath: process.env.PATTERN_DATA_PATH || "./data/cau-patterns.txt",
-    defaultWindows: [...DEFAULT_WINDOWS]
+    defaultWindows: [...DEFAULT_WINDOWS],
+    calibrationMap
   });
 }
-
 
 
 
